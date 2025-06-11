@@ -6,8 +6,11 @@ from sqlalchemy.orm import Session
 import shutil
 import os
 
-from models import Base, Post, Comment, engine, get_db
+from sqlmodel import SQLModel
 from starlette.middleware.sessions import SessionMiddleware
+
+from fotolog.models.models import Comment, Post
+from fotolog.db import engine, get_db
 
 UPLOAD_DIR = "static/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -18,41 +21,39 @@ app.add_middleware(SessionMiddleware, secret_key="chave-secreta-troque-isso")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
-Base.metadata.create_all(bind=engine)
+SQLModel.metadata.create_all(bind=engine)
+
 
 def is_logged_in(request: Request):
     return request.session.get("logged_in", False)
 
+
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request, db: Session = Depends(get_db)):
     posts = db.query(Post).order_by(Post.created_at.desc()).all()
-    return templates.TemplateResponse("index.html", {"request": request, "posts": posts})
+    return templates.TemplateResponse(
+        "index.html", {"request": request, "posts": posts}
+    )
 
-@app.get("/login", response_class=HTMLResponse)
-def login_get(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request})
-
-@app.post("/login")
-def login_post(request: Request, username: str = Form(...), password: str = Form(...)):
-    if username == "admin" and password == "senha123":
-        request.session["logged_in"] = True
-        return RedirectResponse("/admin", status_code=302)
-    return templates.TemplateResponse("login.html", {"request": request, "error": "Credenciais inválidas"})
-
-@app.get("/logout")
-def logout(request: Request):
-    request.session.clear()
-    return RedirectResponse("/", status_code=302)
 
 @app.get("/admin", response_class=HTMLResponse)
 def admin_get(request: Request, db: Session = Depends(get_db)):
     if not is_logged_in(request):
         return RedirectResponse("/login", status_code=302)
     posts = db.query(Post).order_by(Post.created_at.desc()).all()
-    return templates.TemplateResponse("admin.html", {"request": request, "posts": posts})
+    return templates.TemplateResponse(
+        "admin.html", {"request": request, "posts": posts}
+    )
+
 
 @app.post("/admin")
-def admin_post(request: Request, title: str = Form(...), caption: str = Form(...), photo: UploadFile = File(...), db: Session = Depends(get_db)):
+def admin_post(
+    request: Request,
+    title: str = Form(...),
+    caption: str = Form(...),
+    photo: UploadFile = File(...),
+    db: Session = Depends(get_db),
+):
     if not is_logged_in(request):
         raise HTTPException(status_code=403)
 
@@ -65,6 +66,7 @@ def admin_post(request: Request, title: str = Form(...), caption: str = Form(...
     db.add(post)
     db.commit()
     return RedirectResponse("/admin", status_code=302)
+
 
 @app.get("/delete/{post_id}")
 def delete_post(post_id: int, request: Request, db: Session = Depends(get_db)):
@@ -80,6 +82,7 @@ def delete_post(post_id: int, request: Request, db: Session = Depends(get_db)):
         db.commit()
     return RedirectResponse("/admin", status_code=302)
 
+
 @app.post("/like/{post_id}")
 def like_post(post_id: int, db: Session = Depends(get_db)):
     post = db.query(Post).get(post_id)
@@ -87,6 +90,7 @@ def like_post(post_id: int, db: Session = Depends(get_db)):
         post.likes += 1
         db.commit()
     return RedirectResponse("/", status_code=302)
+
 
 @app.post("/comment/{post_id}")
 def comment_post(post_id: int, content: str = Form(...), db: Session = Depends(get_db)):
@@ -101,15 +105,21 @@ def edit_comment(comment_id: int, request: Request, db: Session = Depends(get_db
     comment = db.query(Comment).get(comment_id)
     if not comment:
         raise HTTPException(status_code=404)
-    return templates.TemplateResponse("edit_comment.html", {"request": request, "comment": comment})
+    return templates.TemplateResponse(
+        "edit_comment.html", {"request": request, "comment": comment}
+    )
+
 
 @app.post("/edit_comment/{comment_id}")
-def edit_comment_post(comment_id: int, content: str = Form(...), db: Session = Depends(get_db)):
+def edit_comment_post(
+    comment_id: int, content: str = Form(...), db: Session = Depends(get_db)
+):
     comment = db.query(Comment).get(comment_id)
     if comment:
         comment.content = content
         db.commit()
     return RedirectResponse("/", status_code=302)
+
 
 @app.get("/delete_comment/{comment_id}")
 def delete_comment(comment_id: int, db: Session = Depends(get_db)):
@@ -118,6 +128,7 @@ def delete_comment(comment_id: int, db: Session = Depends(get_db)):
         db.delete(comment)
         db.commit()
     return RedirectResponse("/", status_code=302)
+
 
 @app.post("/like_once/{post_id}")
 def like_post_once(post_id: int, request: Request, db: Session = Depends(get_db)):
