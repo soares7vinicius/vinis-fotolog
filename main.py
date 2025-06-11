@@ -5,6 +5,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 import shutil
 import os
+import uuid
 
 from models import Base, Post, Comment, engine, get_db
 from starlette.middleware.sessions import SessionMiddleware
@@ -19,6 +20,15 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 Base.metadata.create_all(bind=engine)
+
+def save_upload_file(upload_file: UploadFile) -> str:
+    """Save an uploaded file using a random name and return the stored filename."""
+    ext = os.path.splitext(os.path.basename(upload_file.filename))[1]
+    unique_name = f"{uuid.uuid4().hex}{ext}"
+    filepath = os.path.join(UPLOAD_DIR, unique_name)
+    with open(filepath, "wb") as buffer:
+        shutil.copyfileobj(upload_file.file, buffer)
+    return unique_name
 
 def is_logged_in(request: Request):
     return request.session.get("logged_in", False)
@@ -56,10 +66,7 @@ def admin_post(request: Request, title: str = Form(...), caption: str = Form(...
     if not is_logged_in(request):
         raise HTTPException(status_code=403)
 
-    filename = photo.filename
-    filepath = os.path.join(UPLOAD_DIR, filename)
-    with open(filepath, "wb") as buffer:
-        shutil.copyfileobj(photo.file, buffer)
+    filename = save_upload_file(photo)
 
     post = Post(title=title, caption=caption, filename=filename)
     db.add(post)
