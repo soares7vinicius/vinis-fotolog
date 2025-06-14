@@ -197,3 +197,6 @@ fotolog.db
 
 # Node.js dependencies
 frontend/node_modules/
+
+
+local_scripts/

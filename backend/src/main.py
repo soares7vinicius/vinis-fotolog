@@ -9,8 +9,8 @@ import os
 from sqlmodel import SQLModel
 from starlette.middleware.sessions import SessionMiddleware
 
-from fotolog.models.models import Comment, Post
-from fotolog.db import engine, get_db
+from src.models.models import Comment, Post
+from src.db import engine, get_db
 
 UPLOAD_DIR = "static/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)

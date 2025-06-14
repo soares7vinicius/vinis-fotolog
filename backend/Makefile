@@ -8,4 +8,4 @@ shell:
 	poetry shell
 
 init-db:
-	poetry run python -c "from fotolog.models import Base, engine; Base.metadata.create_all(bind=engine)"
+	PYTHONPATH=backend poetry run python -c "from src.models import Base; from src.db import engine; Base.metadata.create_all(bind=engine)"

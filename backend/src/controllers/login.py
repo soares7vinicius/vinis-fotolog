@@ -1,6 +1,6 @@
 from fastapi import Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
-from fotolog.main import app, templates
+from src.main import app, templates
 
 
 @app.get("/login", response_class=HTMLResponse)
