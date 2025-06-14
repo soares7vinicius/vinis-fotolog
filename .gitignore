@@ -194,3 +194,6 @@ cython_debug/
 .cursorindexingignore
 static/uploads/
 fotolog.db
+
+# Node.js dependencies
+frontend/node_modules/
