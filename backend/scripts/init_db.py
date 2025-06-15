@@ -1,9 +1,5 @@
-import sys
-from pathlib import Path
-
-sys.path.append(str(Path(__file__).resolve().parents[1]))
-
-from src.models import Base
+from sqlmodel import SQLModel
 from src.db import engine
+from src.models.models import User, Post, Comment
 
-Base.metadata.create_all(bind=engine)
+SQLModel.metadata.create_all(bind=engine)

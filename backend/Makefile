@@ -8,4 +8,7 @@ shell:
 	poetry shell
 
 init-db:
-	PYTHONPATH=backend poetry run python -c "from src.models import Base; from src.db import engine; Base.metadata.create_all(bind=engine)"
+	poetry run python -m scripts.init_db
+
+create-user :
+	poetry run python -m scripts.create_user ${username} ${password}
