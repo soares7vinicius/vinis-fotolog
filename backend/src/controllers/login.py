@@ -1,16 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from passlib.hash import bcrypt
 from pydantic import BaseModel
 from sqlmodel import Session, select
 from src.db import get_db
+from src.models.api_models.login import LoginPayload
 from src.models.models import User
 
 router = APIRouter()
-
-
-class LoginPayload(BaseModel):
-    username: str
-    password: str
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 def is_logged_in(request: Request):
