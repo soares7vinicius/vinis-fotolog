@@ -38,9 +38,8 @@ def create_post(
             detail=f"Unsupported image format. Please upload any of the following formats: {', '.join(SUPPORTED_FORMATS)}",
         )
 
-    # TODO: get image's metadata (width, height, lens, exposure, etc.)
     image_bytes = image.file.read()
-    # metadata = get_image_metadata(image_bytes)
+    metadata = get_image_metadata(image_bytes)
 
     image_bytes = any_to_jpeg(image_bytes, image.filename)
     image_bytes = resize_image(image_bytes, max_size=2048)
@@ -62,7 +61,7 @@ def create_post(
         "detail": "Post created successfully",
         "post_id": post.id,
         "filename": filename,
-        # "metadata": metadata,
+        "metadata": metadata,
     }
 
 
