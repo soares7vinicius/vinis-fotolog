@@ -1,5 +1,5 @@
 run:
-	poetry run uvicorn fotolog.main:app --host 0.0.0.0 --port 8000 --reload --workers 1 --log-level debug
+	poetry run uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload --workers 1 --log-level debug
 
 install:
 	poetry install

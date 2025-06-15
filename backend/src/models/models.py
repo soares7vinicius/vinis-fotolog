@@ -19,8 +19,8 @@ class User(SQLModel, table=True):
 
     @classmethod
     def hash_password(cls, password: str) -> str:
-        import passlib
-        return passlib.hash.bcrypt.hash(password)
+        from passlib.hash import bcrypt
+        return bcrypt.hash(password)
 
 
 
