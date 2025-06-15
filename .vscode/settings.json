@@ -1,3 +1,7 @@
 {
-    "makefile.configureOnOpen": false
+    "makefile.configureOnOpen": false,
+    "python.testing.pytestArgs": ["backend/src"],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.envFile": "${workspaceFolder}/.env"
 }

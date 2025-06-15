@@ -1,11 +1,9 @@
-from fastapi import Depends, HTTPException, Request, status, Response
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from passlib.hash import bcrypt
 from pydantic import BaseModel
 from sqlmodel import Session, select
-
 from src.db import get_db
 from src.models.models import User
-from fastapi import APIRouter
 
 router = APIRouter()
 
@@ -37,4 +35,4 @@ def login(payload: LoginPayload, request: Request, db: Session = Depends(get_db)
 @router.post("/logout")
 def logout(request: Request):
     request.session.clear()
-    return Response({"detail": "Success"}, status_code=status.HTTP_200_OK)
+    return {"detail": "Success"}

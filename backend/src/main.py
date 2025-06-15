@@ -2,10 +2,9 @@ import os
 
 from fastapi import FastAPI
 from sqlmodel import SQLModel
-from starlette.middleware.sessions import SessionMiddleware
-
 from src.controllers.login import router as login_router
 from src.db import engine
+from starlette.middleware.sessions import SessionMiddleware
 
 UPLOAD_DIR = "static/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)

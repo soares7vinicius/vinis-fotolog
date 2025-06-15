@@ -1,5 +1,6 @@
-from src.models.models import User
 from src.db import get_db
+from src.models.models import User
+
 
 def create_user(username: str, password: str):
     db = next(get_db())
@@ -9,6 +10,7 @@ def create_user(username: str, password: str):
     db.commit()
     db.refresh(user)
     return user
+
 
 if __name__ == "__main__":
     import sys
