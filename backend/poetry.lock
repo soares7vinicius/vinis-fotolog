@@ -331,21 +331,6 @@ files = [
 ]
 
 [[package]]
-name = "exifread"
-version = "3.3.1"
-description = "Library to extract Exif information from digital camera image files."
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "exifread-3.3.1-py3-none-any.whl", hash = "sha256:b7405f890738dbca9992f74a326a4ac3d51512cd129353950d69e774dc5a1767"},
-    {file = "exifread-3.3.1.tar.gz", hash = "sha256:320d8596c1f674a1da2c10cf30408bb9675262c4c0181bebbd3570679d2f1340"},
-]
-
-[package.extras]
-dev = ["build (>=1.0,<2.0)", "pre-commit (>=2.21,<3.0)", "pylint (>=3.0,<4.0)"]
-test = ["pytest (>=7.4,<8.0)"]
-
-[[package]]
 name = "exiv2"
 version = "0.17.3"
 description = "Python interface to libexiv2"
@@ -1573,4 +1558,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "c7abfbf570eb5edc80467a12507c8b5a0a6c8cefd586ac815cce840e7d51ae1e"
+content-hash = "28b148274b5a8ad1c0e2328015f7b4a3f14e051ae47f00b66222aa94c86ea40d"

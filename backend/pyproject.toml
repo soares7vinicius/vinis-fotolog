@@ -22,7 +22,6 @@ bcrypt = "<4.0.0"
 httpx = "^0.28.1"
 pytest = "^8.4.0"
 pillow-heif = "^0.22.0"
-exifread = "^3.3.1"
 exiv2 = "^0.17.3"
 
 [tool.poetry.group.dev.dependencies]
