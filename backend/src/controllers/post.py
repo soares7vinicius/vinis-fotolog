@@ -3,17 +3,11 @@ from uuid import uuid4
 
 from fastapi import APIRouter, Depends, Form, HTTPException, Request, UploadFile, status
 from sqlmodel import Session, select
+from src.config import UPLOAD_DIR
 from src.db import get_db
 from src.models.api_models.post import GetPostsPayload
 from src.models.models import ImageMetadata, Post
-from src.utils.image import (
-    SUPPORTED_FORMATS,
-    any_to_jpeg,
-    get_image_metadata,
-    is_supported_format,
-    resize_image,
-    write_image_to_file,
-)
+from src.utils.image import SUPPORTED_FORMATS, ImageProcessor
 
 router = APIRouter()
 
@@ -32,21 +26,17 @@ def create_post(
             detail="You must be logged in to create a post",
         )
 
-    if not is_supported_format(image.filename):
+    ip = ImageProcessor(image.file.read(), image.filename)
+
+    if not ip.is_supported():
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Unsupported image format. Please upload any of the following formats: {', '.join(SUPPORTED_FORMATS)}",
         )
 
-    image_bytes = image.file.read()
-    metadata = get_image_metadata(image_bytes)
-    image_bytes = any_to_jpeg(image_bytes, image.filename)
-    image_bytes = resize_image(image_bytes, max_size=2048)
-
-    filename = f"{uuid4().hex}.jpg"
-    filepath = f"static/uploads/{filename}"
-    os.makedirs(os.path.dirname(filepath), exist_ok=True)
-    write_image_to_file(image_bytes, filepath)
+    ip.to_jpeg(inplace=True)
+    ip.resize(max_size=2048, inplace=True)
+    filename = ip.to_file(UPLOAD_DIR)
 
     user_id = request.session.get("user_id")
     post = Post(
@@ -54,7 +44,7 @@ def create_post(
         caption=caption,
         filename=filename,
         user_id=user_id,
-        image_metadata=ImageMetadata(**metadata),
+        image_metadata=ImageMetadata(**ip.metadata),
     )
     db.add(post), db.commit(), db.refresh(post)
     return {
