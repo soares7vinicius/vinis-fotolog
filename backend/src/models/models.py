@@ -26,6 +26,27 @@ class User(SQLModel, table=True):
         return bcrypt.hash(password)
 
 
+class ImageMetadata(SQLModel, table=True):
+    __tablename__ = "image_metadata"
+    id: int = Field(primary_key=True, index=True)
+    post_id: int = Field(foreign_key="posts.id")
+    file_size: int | None = None
+    format: str | None = None
+    mode: str | None = None
+    width: int | None = None
+    height: int | None = None
+    date_time: str | None = None
+    lens: str | None = None
+    iso: str | None = None
+    aperture: str | None = None
+    shutter_speed: str | None = None
+    focal_length: str | None = None
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+    # --
+    post: "Post" = Relationship(back_populates="image_metadata")
+
+
 class Post(SQLModel, table=True):
     __tablename__ = "posts"
     id: int = Field(primary_key=True, index=True)
@@ -40,6 +61,9 @@ class Post(SQLModel, table=True):
         back_populates="post", sa_relationship_kwargs={"lazy": "selectin"}
     )
     user: User = Relationship(back_populates="posts")
+    image_metadata: ImageMetadata = Relationship(
+        back_populates="post", sa_relationship_kwargs={"lazy": "selectin"}
+    )
 
 
 class Comment(SQLModel, table=True):

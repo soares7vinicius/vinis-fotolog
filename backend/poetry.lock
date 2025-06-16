@@ -346,6 +346,46 @@ dev = ["build (>=1.0,<2.0)", "pre-commit (>=2.21,<3.0)", "pylint (>=3.0,<4.0)"]
 test = ["pytest (>=7.4,<8.0)"]
 
 [[package]]
+name = "exiv2"
+version = "0.17.3"
+description = "Python interface to libexiv2"
+optional = false
+python-versions = "*"
+files = [
+    {file = "exiv2-0.17.3-cp310-cp310-macosx_13_0_x86_64.whl", hash = "sha256:f66d13325f8081faf31fc7e4f959f008609d9dcb5f818ffbdbee50de3bbe199e"},
+    {file = "exiv2-0.17.3-cp310-cp310-macosx_14_0_arm64.whl", hash = "sha256:989d859539588f10441096a03db8941726b94f579b85ad521903e9fe552f5494"},
+    {file = "exiv2-0.17.3-cp310-cp310-manylinux_2_28_x86_64.whl", hash = "sha256:f3d371249d2fcabbc7a7696d41ca04b760f6ba0a39020e2272b26dbfa035464a"},
+    {file = "exiv2-0.17.3-cp310-cp310-win_amd64.whl", hash = "sha256:a0ae1eb9659a57b2ccca4816e7b4d3237959e411d01ec1c94a88c69a48abc994"},
+    {file = "exiv2-0.17.3-cp311-cp311-macosx_13_0_x86_64.whl", hash = "sha256:1defc5b6c76d8350c42d46160d24e75f418dc94ad10583a4711fffb7ce86013c"},
+    {file = "exiv2-0.17.3-cp311-cp311-macosx_14_0_arm64.whl", hash = "sha256:b5166fdbdb634449ff7226c4088a70577b31aaaa73d4b869fdb92c9b0e644b2e"},
+    {file = "exiv2-0.17.3-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:fe7ee01ebb32f66f1630fef55ad0274dccf3ac540e5b3d20a9be61050ee17584"},
+    {file = "exiv2-0.17.3-cp311-cp311-win_amd64.whl", hash = "sha256:af189ceddce13c1377d119a9ab8e489301f6a5c1d99d5141f7908aead23116e2"},
+    {file = "exiv2-0.17.3-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:62f93e4cde52efe567d90545e5d777b86f4514b4a221baa8c69bec2d159e148d"},
+    {file = "exiv2-0.17.3-cp312-cp312-macosx_14_0_arm64.whl", hash = "sha256:2a49b049b7ec9897bfedfa9cb92026d959ec2a91c0a65e578181fb608f0ebf6b"},
+    {file = "exiv2-0.17.3-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:0f175c18694f77c32cd41adfe800c7abbf5ae335324fa133450aa320b74d9690"},
+    {file = "exiv2-0.17.3-cp312-cp312-win_amd64.whl", hash = "sha256:4f6b2396a290369a7ac61904e531fe408c632f199cfd7188b412eb369cee5bdf"},
+    {file = "exiv2-0.17.3-cp313-cp313-macosx_13_0_x86_64.whl", hash = "sha256:2e1164e33c3e13ff94c4bb34bcb1a9d49a207e9466b89111d4a572233e8d3972"},
+    {file = "exiv2-0.17.3-cp313-cp313-macosx_14_0_arm64.whl", hash = "sha256:8cd671602ca81d6d0df4e23c2f415afd73644c21ff3f785cfb8f5a1b42134c28"},
+    {file = "exiv2-0.17.3-cp313-cp313-manylinux_2_28_x86_64.whl", hash = "sha256:c24dec00e7905260d6e4fecffbe3f695e74e83e891ee3e79b6de98ae2078baba"},
+    {file = "exiv2-0.17.3-cp313-cp313-win_amd64.whl", hash = "sha256:6ffb59fbd19fe12d858451cd7217ac6c6f793c2253e45e50acd6d69ec17bd73e"},
+    {file = "exiv2-0.17.3-cp36-cp36m-macosx_13_0_x86_64.whl", hash = "sha256:63e4fa2697cb0c7f8c966a1045518b39e866fc124b074c0c5465d357d04171b7"},
+    {file = "exiv2-0.17.3-cp36-cp36m-manylinux_2_28_x86_64.whl", hash = "sha256:ae0f4bd3c3434814b7d8d11f0d9661a927e6ee3a4e311852feaeb5586cff5200"},
+    {file = "exiv2-0.17.3-cp36-cp36m-win_amd64.whl", hash = "sha256:ef355d7036499346635cffda36f0df0157e328cdc92e653ce208223d29706e3a"},
+    {file = "exiv2-0.17.3-cp37-cp37m-macosx_13_0_x86_64.whl", hash = "sha256:12c3c56dd424f1c04585a3335d993d14226508ae63b4e3df60b2dc8acf66df3a"},
+    {file = "exiv2-0.17.3-cp37-cp37m-manylinux_2_28_x86_64.whl", hash = "sha256:300ce7e1b05fb7115f0fc214a5454959109c2920a1085fdc7de86ce87612f81c"},
+    {file = "exiv2-0.17.3-cp37-cp37m-win_amd64.whl", hash = "sha256:986e638ee97cf0c007b549e4fef8737e9fd4dec29138b41bd0da6cd0335ca7d1"},
+    {file = "exiv2-0.17.3-cp38-cp38-macosx_13_0_x86_64.whl", hash = "sha256:89a1b93aab19f0856188390583c6482b278dece353ce5d63eaa65668a1f43432"},
+    {file = "exiv2-0.17.3-cp38-cp38-macosx_14_0_arm64.whl", hash = "sha256:c4e12a34981959bde449b95a68b03d299b22362df2aa9dc44aaaae3f58109039"},
+    {file = "exiv2-0.17.3-cp38-cp38-manylinux_2_28_x86_64.whl", hash = "sha256:3ea6361a527de05a727d2b45b72ead9e36e6791a34d60ee8c4b6d16f310b7535"},
+    {file = "exiv2-0.17.3-cp38-cp38-win_amd64.whl", hash = "sha256:f96e60044c495b0cd39b09bf72ba2c30bc61a55507c95686cf802737c6052d81"},
+    {file = "exiv2-0.17.3-cp39-cp39-macosx_13_0_x86_64.whl", hash = "sha256:077de933443d9fe08c6818e7d1c785d5eaeb339d06fe6342ad766a9aa5e61ecd"},
+    {file = "exiv2-0.17.3-cp39-cp39-macosx_14_0_arm64.whl", hash = "sha256:ea7d2ca533b98fbf35113026ec128baba875892129c5c354cf73c7905a305c77"},
+    {file = "exiv2-0.17.3-cp39-cp39-manylinux_2_28_x86_64.whl", hash = "sha256:30eda4f91f594855b88d03c34f3ddc36f395886f46a08ece9a6066b87acfef04"},
+    {file = "exiv2-0.17.3-cp39-cp39-win_amd64.whl", hash = "sha256:7bf814a340056fc748fdf7d5a1c84a24dc5fb0cef501c34cbf7a99cff7ff3902"},
+    {file = "exiv2-0.17.3.tar.gz", hash = "sha256:07874b29f8019688294408f93d4b7f7a9d59a40231c8ab895a48e8e8f265bc4b"},
+]
+
+[[package]]
 name = "fastapi"
 version = "0.115.12"
 description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
@@ -1533,4 +1573,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "7780b44c700fad6cf9c9f3679be4f5e3817c2334b303eba69babed3160f415c6"
+content-hash = "c7abfbf570eb5edc80467a12507c8b5a0a6c8cefd586ac815cce840e7d51ae1e"

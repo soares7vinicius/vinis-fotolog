@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, Form, HTTPException, Request, UploadFile
 from sqlmodel import Session, select
 from src.db import get_db
 from src.models.api_models.post import GetPostsPayload
-from src.models.models import Post
+from src.models.models import ImageMetadata, Post
 from src.utils.image import (
     SUPPORTED_FORMATS,
     any_to_jpeg,
@@ -40,7 +40,6 @@ def create_post(
 
     image_bytes = image.file.read()
     metadata = get_image_metadata(image_bytes)
-
     image_bytes = any_to_jpeg(image_bytes, image.filename)
     image_bytes = resize_image(image_bytes, max_size=2048)
 
@@ -55,13 +54,13 @@ def create_post(
         caption=caption,
         filename=filename,
         user_id=user_id,
+        image_metadata=ImageMetadata(**metadata),
     )
     db.add(post), db.commit(), db.refresh(post)
     return {
-        "detail": "Post created successfully",
-        "post_id": post.id,
-        "filename": filename,
-        "metadata": metadata,
+        "post": post,
+        "image_metadata": post.image_metadata,
+        "message": "Post created successfully",
     }
 
 

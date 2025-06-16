@@ -1,10 +1,14 @@
+import logging
 from io import BytesIO
 
 import exifread
+import exiv2
 import imageio
 import pillow_heif
 import rawpy
 from PIL import Image
+
+logger = logging.getLogger(__name__)
 
 SUPPORTED_FORMATS_NORMAL = [
     "jpg",
@@ -95,54 +99,7 @@ def resize_image(image_bytes: bytes, max_size: int = 1024) -> bytes:
 
 
 def get_image_metadata(image_bytes: bytes) -> dict:
-    """Return basic and EXIF metadata for an image.
-
-    The function tries to provide commonly useful fields regardless of the
-    source format. When available, EXIF information such as ISO, aperture,
-    shutter speed, and lens model is also returned.
-    """
-
-    metadata = {
-        "file_size": len(image_bytes),
-    }
-
-    try:
-        img = Image.open(BytesIO(image_bytes))
-    except Exception:
-        return metadata
-
-    metadata.update(
-        {
-            "format": img.format,
-            "mode": img.mode,
-            "width": img.width,
-            "height": img.height,
-        }
-    )
-
-    tags = {}
-    try:
-        tags = exifread.process_file(BytesIO(image_bytes), details=False, strict=False)
-    except Exception:
-        pass
-
-    def _get_tag(*keys):
-        for key in keys:
-            if key in tags:
-                return str(tags[key])
-        return None
-
-    metadata.update(
-        {
-            "date_time": _get_tag("EXIF DateTimeOriginal", "Image DateTime"),
-            "lens": _get_tag("EXIF LensModel", "Image LensModel"),
-            "iso": _get_tag("EXIF ISOSpeedRatings"),
-            "aperture": _get_tag("EXIF FNumber"),
-            "shutter_speed": _get_tag("EXIF ExposureTime"),
-            "focal_length": _get_tag("EXIF FocalLength"),
-        }
-    )
-
+    metadata = {}
     return metadata
 
 
