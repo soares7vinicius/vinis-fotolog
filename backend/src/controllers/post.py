@@ -1,6 +1,3 @@
-import os
-from uuid import uuid4
-
 from fastapi import APIRouter, Depends, Form, HTTPException, Request, UploadFile, status
 from sqlmodel import Session, select
 from src.config import UPLOAD_DIR
@@ -76,3 +73,28 @@ def get_posts(payload: GetPostsPayload, db: Session = Depends(get_db)):
     )
     posts = db.exec(stmt).all()
     return posts
+
+
+@router.post("/posts/{post_id}/like")
+def like_post(post_id: int, request: Request, db: Session = Depends(get_db)):
+    liked_posts: list[int] = request.session.get("liked_posts", [])
+
+    if post_id in liked_posts:
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="You have already liked this post",
+        )
+
+    post = db.get(Post, post_id)
+    if not post:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Post not found",
+        )
+
+    post.likes += 1
+    db.add(post), db.commit(), db.refresh(post)
+
+    request.session["liked_posts"] = liked_posts + [post_id]
+
+    return {"post_id": post.id, "likes": post.likes}
