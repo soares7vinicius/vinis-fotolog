@@ -165,17 +165,15 @@ class ImageProcessor:
 
         try:
             exif = img.exifData()
-            clean_value = lambda v: str(v).split(": ", 1)[-1]
+            clean_v = lambda v: str(v).split(": ", 1)[-1]
             metadata.update(
                 {
-                    "date_time": clean_value(exiv2.easyaccess.dateTimeOriginal(exif)),
-                    "lens": clean_value(exiv2.easyaccess.lensName(exif)),
-                    "iso": clean_value(exiv2.easyaccess.isoSpeed(exif)),
-                    "aperture": clean_value(exiv2.easyaccess.fNumber(exif)),
-                    "shutter_speed": clean_value(
-                        exiv2.easyaccess.shutterSpeedValue(exif)
-                    ),
-                    "focal_length": clean_value(exiv2.easyaccess.focalLength(exif)),
+                    "date_time": clean_v(exiv2.easyaccess.dateTimeOriginal(exif)),
+                    "lens": clean_v(exiv2.easyaccess.lensName(exif)),
+                    "iso": clean_v(exiv2.easyaccess.isoSpeed(exif)),
+                    "aperture": clean_v(exiv2.easyaccess.fNumber(exif)),
+                    "shutter_speed": clean_v(exiv2.easyaccess.shutterSpeedValue(exif)),
+                    "focal_length": clean_v(exiv2.easyaccess.focalLength(exif)),
                 }
             )
         except Exception as exc:  # pragma: no cover - exif may be missing
