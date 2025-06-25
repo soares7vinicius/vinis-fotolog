@@ -1,8 +1,16 @@
-from fastapi import APIRouter, Depends, Form, HTTPException, Request, UploadFile, status
+from fastapi import (
+    APIRouter,
+    Depends,
+    Form,
+    HTTPException,
+    Query,
+    Request,
+    UploadFile,
+    status,
+)
 from sqlmodel import Session, select
 from src.config import UPLOAD_DIR
 from src.db import get_db
-from src.models.api_models.post import GetPostsPayload
 from src.models.models import ImageMetadata, Post
 from src.utils.image import SUPPORTED_FORMATS, ImageProcessor
 
@@ -62,17 +70,29 @@ def get_post(post_id: int, db: Session = Depends(get_db)):
     return post
 
 
-@router.get("/posts", response_model=list[Post])
-def get_posts(payload: GetPostsPayload, db: Session = Depends(get_db)):
-    where_clause = [True] if not payload.user_id else [Post.user_id == payload.user_id]
-    stmt = (
-        select(Post)
-        .where(*where_clause)
-        .offset((payload.pagination.page - 1) * payload.pagination.size)
-        .limit(payload.pagination.size)
-    )
+@router.get("/posts")
+def get_posts(
+    user_id: int | None = Query(
+        default=None,
+        description="Filter posts by user ID. If provided, only posts from this user will be returned.",
+    ),
+    page: int = Query(
+        default=1,
+        ge=1,
+        description="The page number to retrieve, starting from 1.",
+    ),
+    size: int = Query(
+        default=10,
+        ge=1,
+        le=100,
+        description="The number of posts per page.",
+    ),
+    db: Session = Depends(get_db),
+):
+    where_clause = [True] if not user_id else [Post.user_id == user_id]
+    stmt = select(Post).where(*where_clause).offset((page - 1) * size).limit(size)
     posts = db.exec(stmt).all()
-    return posts
+    return {"posts": posts, "page": page, "size": size, "total": len(posts)}
 
 
 @router.post("/posts/{post_id}/like")
